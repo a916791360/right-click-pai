@@ -32,6 +32,7 @@ final class FinderSync: FIFinderSync {
 
         do {
             try FinderFileOperations.unhideDirectChildren(of: [folder])
+            NSWorkspace.shared.noteFileSystemChanged(folder.path)
         } catch {
             showError(error.localizedDescription)
         }

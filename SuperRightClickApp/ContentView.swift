@@ -50,7 +50,7 @@ struct ContentView: View {
 
             Spacer()
 
-            Text("1.0.1")
+            Text("1.0.3")
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(.secondary)
         }

@@ -25,6 +25,39 @@ final class FileOperationsTests: XCTestCase {
         XCTAssertEqual(ActionInputLoader.url(from: Data(path.utf8) as NSData)?.path, path)
     }
 
+    func testActionInputLoaderLoadsDocumentProviderInPlace() throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let document = root.appendingPathComponent("report.docx")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        XCTAssertTrue(FileManager.default.createFile(atPath: document.path, contents: Data()))
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        let provider = NSItemProvider()
+        provider.registerFileRepresentation(
+            forTypeIdentifier: "org.openxmlformats.wordprocessingml.document",
+            fileOptions: [.openInPlace],
+            visibility: .all
+        ) { completion in
+            completion(document, true, nil)
+            return nil
+        }
+
+        let loaded = expectation(description: "Loads the original document URL")
+        ActionInputLoader.loadURLs(from: [provider]) { result in
+            do {
+                let scopedURLs = try result.get()
+                XCTAssertEqual(scopedURLs.urls, [document])
+                _ = scopedURLs
+            } catch {
+                XCTFail("Unexpected loading error: \(error)")
+            }
+            loaded.fulfill()
+        }
+
+        wait(for: [loaded], timeout: 2)
+    }
+
     func testUnhideOnlyAffectsDirectNonDotChildren() throws {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)

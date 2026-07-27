@@ -23,35 +23,42 @@ enum ActionInputLoader {
         let providers = context.inputItems
             .compactMap { $0 as? NSExtensionItem }
             .flatMap { $0.attachments ?? [] }
-            .filter { provider in
-                provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier)
-                    || provider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier)
-            }
 
-        guard !providers.isEmpty else {
+        loadURLs(from: providers, completion: completion)
+    }
+
+    static func loadURLs(
+        from providers: [NSItemProvider],
+        completion: @escaping (Result<ScopedURLs, Error>) -> Void
+    ) {
+        let requests = providers.compactMap { provider -> (NSItemProvider, String)? in
+            guard let typeIdentifier = preferredTypeIdentifier(for: provider) else {
+                return nil
+            }
+            return (provider, typeIdentifier)
+        }
+
+        guard !requests.isEmpty else {
             completion(.failure(SuperRightClickError.noInput))
             return
         }
 
         let group = DispatchGroup()
         let stateQueue = DispatchQueue(label: "com.qingmeng.SuperRightClick.input-loader")
-        var resolvedURLs = Array<URL?>(repeating: nil, count: providers.count)
+        var resolvedURLs = Array<URL?>(repeating: nil, count: requests.count)
         var firstError: Error?
 
-        for (index, provider) in providers.enumerated() {
+        for (index, request) in requests.enumerated() {
             group.enter()
-            let typeIdentifier = provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier)
-                ? UTType.fileURL.identifier
-                : UTType.plainText.identifier
-            provider.loadItem(
-                forTypeIdentifier: typeIdentifier,
-                options: nil
-            ) { item, error in
+            loadOriginalURL(from: request.0, typeIdentifier: request.1) { result in
                 stateQueue.sync {
-                    if let url = url(from: item) {
+                    switch result {
+                    case let .success(url):
                         resolvedURLs[index] = url
-                    } else if firstError == nil {
-                        firstError = error ?? SuperRightClickError.unsupportedInput
+                    case let .failure(error):
+                        if firstError == nil {
+                            firstError = error
+                        }
                     }
                 }
                 group.leave()
@@ -65,11 +72,53 @@ enum ActionInputLoader {
             }
 
             let urls = resolvedURLs.compactMap { $0 }
-            guard urls.count == providers.count else {
+            guard urls.count == requests.count else {
                 completion(.failure(SuperRightClickError.unsupportedInput))
                 return
             }
             completion(.success(ScopedURLs(urls: urls)))
+        }
+    }
+
+    private static func preferredTypeIdentifier(for provider: NSItemProvider) -> String? {
+        if let fileType = provider.registeredTypeIdentifiers.first(where: { identifier in
+            UTType(identifier)?.conforms(to: .item) == true
+        }) {
+            return fileType
+        }
+
+        return [UTType.fileURL.identifier, UTType.plainText.identifier].first(where: {
+            provider.hasItemConformingToTypeIdentifier($0)
+        })
+    }
+
+    private static func loadOriginalURL(
+        from provider: NSItemProvider,
+        typeIdentifier: String,
+        completion: @escaping (Result<URL, Error>) -> Void
+    ) {
+        provider.loadInPlaceFileRepresentation(forTypeIdentifier: typeIdentifier) { fileURL, isInPlace, error in
+            if let fileURL, isInPlace {
+                completion(.success(fileURL))
+                return
+            }
+
+            let fallbackType = [UTType.fileURL.identifier, UTType.plainText.identifier].first(where: {
+                provider.hasItemConformingToTypeIdentifier($0)
+            })
+
+            guard let fallbackType else {
+                completion(.failure(error ?? SuperRightClickError.unsupportedInput))
+                return
+            }
+
+            provider.loadItem(forTypeIdentifier: fallbackType, options: nil) { item, fallbackError in
+                if let url = url(from: item) {
+                    completion(.success(url))
+                } else {
+                    completion(.failure(fallbackError ?? error ?? SuperRightClickError.unsupportedInput))
+                }
+            }
         }
     }
 
