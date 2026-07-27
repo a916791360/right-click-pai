@@ -14,6 +14,17 @@ final class FileOperationsTests: XCTestCase {
         )
     }
 
+    func testActionInputLoaderAcceptsPlainTextPathsAndFileURLs() {
+        let path = "/Users/test/My Files/report.pdf"
+
+        XCTAssertEqual(ActionInputLoader.url(from: path as NSString)?.path, path)
+        XCTAssertEqual(
+            ActionInputLoader.url(from: "file:///Users/test/My%20Files/report.pdf" as NSString)?.path,
+            path
+        )
+        XCTAssertEqual(ActionInputLoader.url(from: Data(path.utf8) as NSData)?.path, path)
+    }
+
     func testUnhideOnlyAffectsDirectNonDotChildren() throws {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)

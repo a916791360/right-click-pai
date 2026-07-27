@@ -25,6 +25,7 @@ enum ActionInputLoader {
             .flatMap { $0.attachments ?? [] }
             .filter { provider in
                 provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier)
+                    || provider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier)
             }
 
         guard !providers.isEmpty else {
@@ -39,12 +40,15 @@ enum ActionInputLoader {
 
         for (index, provider) in providers.enumerated() {
             group.enter()
+            let typeIdentifier = provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier)
+                ? UTType.fileURL.identifier
+                : UTType.plainText.identifier
             provider.loadItem(
-                forTypeIdentifier: UTType.fileURL.identifier,
+                forTypeIdentifier: typeIdentifier,
                 options: nil
             ) { item, error in
                 stateQueue.sync {
-                    if let url = fileURL(from: item) {
+                    if let url = url(from: item) {
                         resolvedURLs[index] = url
                     } else if firstError == nil {
                         firstError = error ?? SuperRightClickError.unsupportedInput
@@ -69,12 +73,24 @@ enum ActionInputLoader {
         }
     }
 
-    private static func fileURL(from item: NSSecureCoding?) -> URL? {
+    static func url(from item: NSSecureCoding?) -> URL? {
         if let url = item as? URL {
             return url
         }
         if let data = item as? Data {
+            if let path = String(data: data, encoding: .utf8) {
+                if let url = URL(string: path), url.isFileURL {
+                    return url
+                }
+                return URL(fileURLWithPath: path)
+            }
             return URL(dataRepresentation: data, relativeTo: nil)
+        }
+        if let path = item as? String {
+            if let url = URL(string: path), url.isFileURL {
+                return url
+            }
+            return URL(fileURLWithPath: path)
         }
         return nil
     }

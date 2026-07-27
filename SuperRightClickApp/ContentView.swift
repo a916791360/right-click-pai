@@ -5,7 +5,7 @@ struct ContentView: View {
     private let actions = [
         ActionDescriptor(symbol: "link", title: "拷贝路径", detail: "复制完整路径，多选时每行一个"),
         ActionDescriptor(symbol: "eye.slash", title: "隐藏已选项目", detail: "支持文件和文件夹"),
-        ActionDescriptor(symbol: "eye", title: "取消隐藏文件夹内项目", detail: "仅处理所选文件夹的当前层")
+        ActionDescriptor(symbol: "eye", title: "取消隐藏当前文件夹内全部项目", detail: "恢复当前层的文件和文件夹")
     ]
 
     var body: some View {
@@ -43,14 +43,14 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text("超级右键")
                     .font(.title2.weight(.semibold))
-                Text("三个轻量的 Finder 快速操作")
+                Text("三个轻量的 Finder 右键动作")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
 
             Spacer()
 
-            Text("1.0")
+            Text("1.0.1")
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(.secondary)
         }
@@ -85,7 +85,7 @@ struct ContentView: View {
     private var footer: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("工作流已安装到 Finder 快速操作")
+                Text("功能已安装到 Finder 右键菜单")
                     .font(.subheadline.weight(.medium))
                 Text("可在系统设置中启用、停用或调整顺序")
                     .font(.caption)
