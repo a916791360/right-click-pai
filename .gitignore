@@ -1,0 +1,8 @@
+DerivedData/
+.DS_Store
+.learnings/
+xcuserdata/
+
+# Unrelated projects and product notes sharing this workspace.
+yujie-mobile-prototype/
+业务需求洞察-IM移动端V1.0.0接手分析-2026-07-27/

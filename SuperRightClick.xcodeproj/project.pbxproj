@@ -1,0 +1,190 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		010000000000000000000001 /* SuperRightClickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000001 /* SuperRightClickApp.swift */; };
+		010000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000002 /* ContentView.swift */; };
+		010000000000000000000003 /* CopyPathRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000003 /* CopyPathRequestHandler.swift */; };
+		010000000000000000000004 /* HideSelectedRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000004 /* HideSelectedRequestHandler.swift */; };
+		010000000000000000000005 /* UnhideFolderContentsRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000005 /* UnhideFolderContentsRequestHandler.swift */; };
+		010000000000000000000006 /* ActionError.swift in Copy Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000006 /* ActionError.swift */; };
+		010000000000000000000007 /* ActionInputLoader.swift in Copy Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000007 /* ActionInputLoader.swift */; };
+		010000000000000000000008 /* FileOperations.swift in Copy Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000008 /* FileOperations.swift */; };
+		010000000000000000000009 /* ActionError.swift in Hide Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000006 /* ActionError.swift */; };
+		01000000000000000000000A /* ActionInputLoader.swift in Hide Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000007 /* ActionInputLoader.swift */; };
+		01000000000000000000000B /* FileOperations.swift in Hide Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000008 /* FileOperations.swift */; };
+		01000000000000000000000C /* ActionError.swift in Unhide Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000006 /* ActionError.swift */; };
+		01000000000000000000000D /* ActionInputLoader.swift in Unhide Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000007 /* ActionInputLoader.swift */; };
+		01000000000000000000000E /* FileOperations.swift in Unhide Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000008 /* FileOperations.swift */; };
+		01000000000000000000000F /* FileOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000009 /* FileOperationsTests.swift */; };
+		010000000000000000000010 /* ActionError.swift in Test Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000006 /* ActionError.swift */; };
+		010000000000000000000011 /* FileOperations.swift in Test Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000008 /* FileOperations.swift */; };
+		010000000000000000000012 /* CopyPathAction.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 02000000000000000000000A /* CopyPathAction.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		010000000000000000000013 /* HideSelectedAction.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 02000000000000000000000B /* HideSelectedAction.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		010000000000000000000014 /* UnhideFolderContentsAction.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 02000000000000000000000C /* UnhideFolderContentsAction.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		010000000000000000000015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000015 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		030000000000000000000001 = {isa = PBXContainerItemProxy; containerPortal = 090000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 0A000000000000000000000002; remoteInfo = CopyPathAction; };
+		030000000000000000000002 = {isa = PBXContainerItemProxy; containerPortal = 090000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 0A000000000000000000000003; remoteInfo = HideSelectedAction; };
+		030000000000000000000003 = {isa = PBXContainerItemProxy; containerPortal = 090000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 0A000000000000000000000004; remoteInfo = UnhideFolderContentsAction; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		040000000000000000000001 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				010000000000000000000012 /* CopyPathAction.appex in Embed App Extensions */,
+				010000000000000000000013 /* HideSelectedAction.appex in Embed App Extensions */,
+				010000000000000000000014 /* UnhideFolderContentsAction.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		020000000000000000000001 /* SuperRightClickApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperRightClickApp.swift; sourceTree = "<group>"; };
+		020000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		020000000000000000000003 /* CopyPathRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyPathRequestHandler.swift; sourceTree = "<group>"; };
+		020000000000000000000004 /* HideSelectedRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideSelectedRequestHandler.swift; sourceTree = "<group>"; };
+		020000000000000000000005 /* UnhideFolderContentsRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnhideFolderContentsRequestHandler.swift; sourceTree = "<group>"; };
+		020000000000000000000006 /* ActionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionError.swift; sourceTree = "<group>"; };
+		020000000000000000000007 /* ActionInputLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionInputLoader.swift; sourceTree = "<group>"; };
+		020000000000000000000008 /* FileOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileOperations.swift; sourceTree = "<group>"; };
+		020000000000000000000009 /* FileOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileOperationsTests.swift; sourceTree = "<group>"; };
+		02000000000000000000000A /* CopyPathAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CopyPathAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		02000000000000000000000B /* HideSelectedAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HideSelectedAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		02000000000000000000000C /* UnhideFolderContentsAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = UnhideFolderContentsAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		02000000000000000000000D /* SuperRightClick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuperRightClick.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02000000000000000000000E /* SuperRightClickCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SuperRightClickCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		02000000000000000000000F /* App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "App-Info.plist"; sourceTree = "<group>"; };
+		020000000000000000000010 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
+		020000000000000000000011 /* ActionExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionExtension.entitlements; sourceTree = "<group>"; };
+		020000000000000000000012 /* Copy Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		020000000000000000000013 /* Hide Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		020000000000000000000014 /* Unhide Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		020000000000000000000015 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		050000000000000000000001 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		050000000000000000000002 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		050000000000000000000003 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		050000000000000000000004 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		050000000000000000000005 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		060000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				060000000000000000000002 /* SuperRightClickApp */,
+				060000000000000000000003 /* Shared */,
+				060000000000000000000004 /* CopyPathAction */,
+				060000000000000000000005 /* HideSelectedAction */,
+				060000000000000000000006 /* UnhideFolderContentsAction */,
+				060000000000000000000007 /* Config */,
+				060000000000000000000008 /* Tests */,
+				060000000000000000000009 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		060000000000000000000002 /* SuperRightClickApp */ = {isa = PBXGroup; path = SuperRightClickApp; sourceTree = "<group>"; children = (020000000000000000000001, 020000000000000000000002, 020000000000000000000015, ); };
+		060000000000000000000003 /* Shared */ = {isa = PBXGroup; path = Shared; sourceTree = "<group>"; children = (020000000000000000000006, 020000000000000000000007, 020000000000000000000008, ); };
+		060000000000000000000004 /* CopyPathAction */ = {isa = PBXGroup; path = CopyPathAction; sourceTree = "<group>"; children = (020000000000000000000003, 020000000000000000000012, ); };
+		060000000000000000000005 /* HideSelectedAction */ = {isa = PBXGroup; path = HideSelectedAction; sourceTree = "<group>"; children = (020000000000000000000004, 020000000000000000000013, ); };
+		060000000000000000000006 /* UnhideFolderContentsAction */ = {isa = PBXGroup; path = UnhideFolderContentsAction; sourceTree = "<group>"; children = (020000000000000000000005, 020000000000000000000014, ); };
+		060000000000000000000007 /* Config */ = {isa = PBXGroup; path = Config; sourceTree = "<group>"; children = (02000000000000000000000F, 020000000000000000000010, 020000000000000000000011, ); };
+		060000000000000000000008 /* Tests */ = {isa = PBXGroup; path = Tests/SuperRightClickCoreTests; sourceTree = "<group>"; children = (020000000000000000000009, ); };
+		060000000000000000000009 /* Products */ = {isa = PBXGroup; name = Products; sourceTree = "<group>"; children = (02000000000000000000000D, 02000000000000000000000A, 02000000000000000000000B, 02000000000000000000000C, 02000000000000000000000E, ); };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0A000000000000000000000001 /* SuperRightClick */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0B000000000000000000000001;
+			buildPhases = (070000000000000000000001, 050000000000000000000001, 080000000000000000000001, );
+			buildRules = ();
+			dependencies = ();
+			name = SuperRightClick;
+			productName = SuperRightClick;
+			productReference = 02000000000000000000000D;
+			productType = "com.apple.product-type.application";
+		};
+		0A000000000000000000000002 /* CopyPathAction */ = {isa = PBXNativeTarget; buildConfigurationList = 0B000000000000000000000002; buildPhases = (070000000000000000000002, 050000000000000000000002, ); buildRules = (); dependencies = (); name = CopyPathAction; productName = CopyPathAction; productReference = 02000000000000000000000A; productType = "com.apple.product-type.app-extension"; };
+		0A000000000000000000000003 /* HideSelectedAction */ = {isa = PBXNativeTarget; buildConfigurationList = 0B000000000000000000000003; buildPhases = (070000000000000000000003, 050000000000000000000003, ); buildRules = (); dependencies = (); name = HideSelectedAction; productName = HideSelectedAction; productReference = 02000000000000000000000B; productType = "com.apple.product-type.app-extension"; };
+		0A000000000000000000000004 /* UnhideFolderContentsAction */ = {isa = PBXNativeTarget; buildConfigurationList = 0B000000000000000000000004; buildPhases = (070000000000000000000004, 050000000000000000000004, ); buildRules = (); dependencies = (); name = UnhideFolderContentsAction; productName = UnhideFolderContentsAction; productReference = 02000000000000000000000C; productType = "com.apple.product-type.app-extension"; };
+		0A000000000000000000000005 /* SuperRightClickCoreTests */ = {isa = PBXNativeTarget; buildConfigurationList = 0B000000000000000000000005; buildPhases = (070000000000000000000005, 050000000000000000000005, ); buildRules = (); dependencies = (); name = SuperRightClickCoreTests; productName = SuperRightClickCoreTests; productReference = 02000000000000000000000E; productType = "com.apple.product-type.bundle.unit-test"; };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		090000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {BuildIndependentTargetsInParallel = 1; LastSwiftUpdateCheck = 2600; LastUpgradeCheck = 2600; TargetAttributes = {0A000000000000000000000001 = {CreatedOnToolsVersion = 26.0; }; 0A000000000000000000000002 = {CreatedOnToolsVersion = 26.0; }; 0A000000000000000000000003 = {CreatedOnToolsVersion = 26.0; }; 0A000000000000000000000004 = {CreatedOnToolsVersion = 26.0; }; 0A000000000000000000000005 = {CreatedOnToolsVersion = 26.0; }; }; };
+			buildConfigurationList = 0B000000000000000000000006;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = zh-Hans;
+			hasScannedForEncodings = 0;
+			knownRegions = (Base, "zh-Hans", en, );
+			mainGroup = 060000000000000000000001;
+			productRefGroup = 060000000000000000000009;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (0A000000000000000000000001, 0A000000000000000000000002, 0A000000000000000000000003, 0A000000000000000000000004, 0A000000000000000000000005, );
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		080000000000000000000001 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (010000000000000000000015 /* Assets.xcassets in Resources */, ); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		070000000000000000000001 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (010000000000000000000001, 010000000000000000000002, ); runOnlyForDeploymentPostprocessing = 0; };
+		070000000000000000000002 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (010000000000000000000003, 010000000000000000000006, 010000000000000000000007, 010000000000000000000008, ); runOnlyForDeploymentPostprocessing = 0; };
+		070000000000000000000003 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (010000000000000000000004, 010000000000000000000009, 01000000000000000000000A, 01000000000000000000000B, ); runOnlyForDeploymentPostprocessing = 0; };
+		070000000000000000000004 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (010000000000000000000005, 01000000000000000000000C, 01000000000000000000000D, 01000000000000000000000E, ); runOnlyForDeploymentPostprocessing = 0; };
+		070000000000000000000005 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (01000000000000000000000F, 010000000000000000000010, 010000000000000000000011, ); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0C000000000000000000000001 = {isa = PBXTargetDependency; target = 0A000000000000000000000002; targetProxy = 030000000000000000000001; };
+		0C000000000000000000000002 = {isa = PBXTargetDependency; target = 0A000000000000000000000003; targetProxy = 030000000000000000000002; };
+		0C000000000000000000000003 = {isa = PBXTargetDependency; target = 0A000000000000000000000004; targetProxy = 030000000000000000000003; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0D000000000000000000000001 /* Debug project */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = YES; MACOSX_DEPLOYMENT_TARGET = 26.0; ONLY_ACTIVE_ARCH = YES; SDKROOT = macosx; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_VERSION = 5.0; }; name = Debug; };
+		0D000000000000000000000002 /* Release project */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; MACOSX_DEPLOYMENT_TARGET = 26.0; SDKROOT = macosx; SWIFT_COMPILATION_MODE = wholemodule; SWIFT_OPTIMIZATION_LEVEL = "-O"; SWIFT_VERSION = 5.0; }; name = Release; };
+		0D000000000000000000000003 /* Debug app */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = NO; ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = Config/App.entitlements; CURRENT_PROJECT_VERSION = 4; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = "Config/App-Info.plist"; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClick; PRODUCT_NAME = SuperRightClick; SWIFT_EMIT_LOC_STRINGS = YES; }; name = Debug; };
+		0D000000000000000000000004 /* Release app */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = NO; ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = Config/App.entitlements; CURRENT_PROJECT_VERSION = 4; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = "Config/App-Info.plist"; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClick; PRODUCT_NAME = SuperRightClick; SWIFT_EMIT_LOC_STRINGS = YES; }; name = Release; };
+		0D000000000000000000000005 /* Debug copy */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = Config/ActionExtension.entitlements; CURRENT_PROJECT_VERSION = 3; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = CopyPathAction/Info.plist; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClick.CopyPathAction; PRODUCT_NAME = CopyPathAction; SKIP_INSTALL = YES; SWIFT_STRICT_CONCURRENCY = minimal; }; name = Debug; };
+		0D000000000000000000000006 /* Release copy */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = Config/ActionExtension.entitlements; CURRENT_PROJECT_VERSION = 3; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = CopyPathAction/Info.plist; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClick.CopyPathAction; PRODUCT_NAME = CopyPathAction; SKIP_INSTALL = YES; SWIFT_STRICT_CONCURRENCY = minimal; }; name = Release; };
+		0D000000000000000000000007 /* Debug hide */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = Config/ActionExtension.entitlements; CURRENT_PROJECT_VERSION = 3; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = HideSelectedAction/Info.plist; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClick.HideSelectedAction; PRODUCT_NAME = HideSelectedAction; SKIP_INSTALL = YES; SWIFT_STRICT_CONCURRENCY = minimal; }; name = Debug; };
+		0D000000000000000000000008 /* Release hide */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = Config/ActionExtension.entitlements; CURRENT_PROJECT_VERSION = 3; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = HideSelectedAction/Info.plist; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClick.HideSelectedAction; PRODUCT_NAME = HideSelectedAction; SKIP_INSTALL = YES; SWIFT_STRICT_CONCURRENCY = minimal; }; name = Release; };
+		0D000000000000000000000009 /* Debug unhide */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = Config/ActionExtension.entitlements; CURRENT_PROJECT_VERSION = 3; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = UnhideFolderContentsAction/Info.plist; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClick.UnhideFolderContentsAction; PRODUCT_NAME = UnhideFolderContentsAction; SKIP_INSTALL = YES; SWIFT_STRICT_CONCURRENCY = minimal; }; name = Debug; };
+		0D00000000000000000000000A /* Release unhide */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = Config/ActionExtension.entitlements; CURRENT_PROJECT_VERSION = 3; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = UnhideFolderContentsAction/Info.plist; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClick.UnhideFolderContentsAction; PRODUCT_NAME = UnhideFolderContentsAction; SKIP_INSTALL = YES; SWIFT_STRICT_CONCURRENCY = minimal; }; name = Release; };
+		0D00000000000000000000000B /* Debug tests */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = ""; GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClickCoreTests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_STRICT_CONCURRENCY = minimal; TEST_HOST = ""; }; name = Debug; };
+		0D00000000000000000000000C /* Release tests */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = ""; GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = com.qingmeng.SuperRightClickCoreTests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_STRICT_CONCURRENCY = minimal; TEST_HOST = ""; }; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0B000000000000000000000001 = {isa = XCConfigurationList; buildConfigurations = (0D000000000000000000000003, 0D000000000000000000000004, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B000000000000000000000002 = {isa = XCConfigurationList; buildConfigurations = (0D000000000000000000000005, 0D000000000000000000000006, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B000000000000000000000003 = {isa = XCConfigurationList; buildConfigurations = (0D000000000000000000000007, 0D000000000000000000000008, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B000000000000000000000004 = {isa = XCConfigurationList; buildConfigurations = (0D000000000000000000000009, 0D00000000000000000000000A, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B000000000000000000000005 = {isa = XCConfigurationList; buildConfigurations = (0D00000000000000000000000B, 0D00000000000000000000000C, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0B000000000000000000000006 = {isa = XCConfigurationList; buildConfigurations = (0D000000000000000000000001, 0D000000000000000000000002, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = 090000000000000000000001 /* Project object */;
+}
