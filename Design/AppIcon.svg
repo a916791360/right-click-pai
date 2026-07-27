@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0.08" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#FF4B42"/>
+      <stop offset="0.5" stop-color="#F51E2F"/>
+      <stop offset="1" stop-color="#B90725"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="0.22" cy="0.05" r="0.9">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.42"/>
+      <stop offset="0.4" stop-color="#FFB29F" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#7A0019" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="34" stdDeviation="34" flood-color="#6E0017" flood-opacity="0.34"/>
+    </filter>
+    <filter id="markShadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#78000D" flood-opacity="0.33"/>
+    </filter>
+    <clipPath id="tileClip">
+      <rect x="72" y="58" width="880" height="880" rx="218"/>
+    </clipPath>
+  </defs>
+  <rect x="72" y="58" width="880" height="880" rx="218" fill="url(#bg)" filter="url(#shadow)"/>
+  <g clip-path="url(#tileClip)">
+    <rect x="72" y="58" width="880" height="880" fill="url(#shine)"/>
+    <path d="M75 802C274 720 723 761 955 665V953H72Z" fill="#7D001E" opacity="0.17"/>
+    <path d="M154 145C343 58 716 78 876 164" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" opacity="0.18"/>
+  </g>
+  <path d="M310 698A300 300 0 1 1 774 580" fill="none" stroke="#FFF3E8" stroke-width="72" stroke-linecap="round" filter="url(#markShadow)"/>
+  <path d="M397 642A192 192 0 1 1 681 559" fill="none" stroke="#FFD9CC" stroke-width="56" stroke-linecap="round" opacity="0.8"/>
+  <path d="M499 486L750 685C770 701 762 734 736 739L646 757L693 843C704 863 695 889 675 900L651 913C631 924 605 915 595 894L551 808L486 872C468 890 437 877 438 851L440 523C440 490 473 466 499 486Z" fill="#FFFFFF" filter="url(#markShadow)"/>
+  <circle cx="770" cy="760" r="32" fill="#FFD55C" filter="url(#markShadow)"/>
+</svg>

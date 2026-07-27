@@ -74,14 +74,13 @@ struct ContentView: View {
 
     private var header: some View {
         HStack(spacing: 14) {
-            Image(systemName: "cursorarrow.click.2")
-                .font(.system(size: 28, weight: .medium))
-                .foregroundStyle(.tint)
+            Image(nsImage: NSApplication.shared.applicationIconImage)
+                .resizable()
+                .scaledToFit()
                 .frame(width: 44, height: 44)
-                .background(.tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("超级右键")
+                Text("右键派")
                     .font(.title2.weight(.semibold))
                 Text("三个轻量的 Finder 右键动作")
                     .font(.subheadline)
@@ -188,7 +187,7 @@ struct ContentView: View {
     }
 
     private var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.1.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.2.0"
     }
 
     private func openExtensionSettings() {

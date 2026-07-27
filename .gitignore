@@ -2,6 +2,8 @@ DerivedData/
 .DS_Store
 .learnings/
 xcuserdata/
+Release/
+Design/IconCandidates/
 
 # Unrelated projects and product notes sharing this workspace.
 yujie-mobile-prototype/

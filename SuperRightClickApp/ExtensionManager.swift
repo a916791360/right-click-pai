@@ -235,7 +235,7 @@ private enum ExtensionControlError: LocalizedError {
         case .commandFailed(let message):
             return "系统未接受这次修改：\(message)"
         case .extensionNotFound(let title):
-            return "系统尚未注册“\(title)”扩展。请重新打开超级右键后再试。"
+            return "系统尚未注册“\(title)”扩展。请重新打开右键派后再试。"
         case .preferenceWriteFailed:
             return "无法保存 Finder 快速操作设置。"
         case .stateDidNotChange(let title):
