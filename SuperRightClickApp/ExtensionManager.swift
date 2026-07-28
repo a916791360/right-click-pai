@@ -2,16 +2,11 @@ import CoreFoundation
 import Foundation
 
 struct FinderActionDescriptor: Identifiable, Hashable {
-    enum Control: Hashable {
-        case quickAction(preferenceKey: String)
-        case finderSync
-    }
-
-    let id: String
+    var id: FinderMenuAction { action }
+    let action: FinderMenuAction
     let symbol: String
     let title: String
     let detail: String
-    let control: Control
 }
 
 struct ExtensionControlAlert: Identifiable {
@@ -21,8 +16,8 @@ struct ExtensionControlAlert: Identifiable {
 }
 
 final class ExtensionManager: ObservableObject {
-    @Published private(set) var enabledByID: [String: Bool] = [:]
-    @Published private(set) var busyIDs: Set<String> = []
+    @Published private(set) var enabledByID: [FinderMenuAction: Bool] = [:]
+    @Published private(set) var busyIDs: Set<FinderMenuAction> = []
     @Published private(set) var isRefreshing = false
     @Published var alert: ExtensionControlAlert?
 
@@ -39,20 +34,19 @@ final class ExtensionManager: ObservableObject {
         isRefreshing = true
 
         DispatchQueue.global(qos: .userInitiated).async {
-            var states: [String: Bool] = [:]
+            var states: [FinderMenuAction: Bool] = [:]
             var firstError: Error?
 
-            for action in actions {
-                do {
-                    states[action.id] = try SystemExtensionController.isEnabled(action)
-                } catch {
-                    firstError = firstError ?? error
-                }
+            do {
+                try SystemExtensionController.prepareFinderMenu()
+                states = FinderMenuSettings.enabledStates()
+            } catch {
+                firstError = error
             }
 
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
-                self.enabledByID.merge(states) { _, refreshed in refreshed }
+                self.enabledByID = states
                 self.isRefreshing = false
                 if let firstError {
                     self.alert = ExtensionControlAlert(
@@ -67,30 +61,31 @@ final class ExtensionManager: ObservableObject {
     func setEnabled(_ enabled: Bool, for action: FinderActionDescriptor) {
         guard !isRefreshing, !busyIDs.contains(action.id) else { return }
 
-        let previousValue = enabledByID[action.id] ?? !enabled
-        enabledByID[action.id] = enabled
-        busyIDs.insert(action.id)
+        let actionID = action.id
+        let previousValue = enabledByID[actionID] ?? !enabled
+        enabledByID[actionID] = enabled
+        busyIDs.insert(actionID)
 
         DispatchQueue.global(qos: .userInitiated).async {
             var actualValue = previousValue
             var operationError: Error?
 
             do {
-                try SystemExtensionController.setEnabled(enabled, for: action)
-                actualValue = try SystemExtensionController.isEnabled(action)
+                try FinderMenuSettings.setEnabled(enabled, for: action.action)
+                try SystemExtensionController.enableFinderSync()
+                actualValue = FinderMenuSettings.isEnabled(action.action)
                 guard actualValue == enabled else {
                     throw ExtensionControlError.stateDidNotChange(action.title)
                 }
-                try SystemExtensionController.reloadFinder()
             } catch {
                 operationError = error
-                actualValue = (try? SystemExtensionController.isEnabled(action)) ?? previousValue
+                actualValue = FinderMenuSettings.isEnabled(action.action)
             }
 
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
-                self.enabledByID[action.id] = actualValue
-                self.busyIDs.remove(action.id)
+                self.enabledByID[actionID] = actualValue
+                self.busyIDs.remove(actionID)
                 if let operationError {
                     self.alert = ExtensionControlAlert(
                         title: "未能更新“\(action.title)”",
@@ -103,60 +98,44 @@ final class ExtensionManager: ObservableObject {
 }
 
 private enum SystemExtensionController {
+    private static let finderSyncIdentifier = "com.qingmeng.SuperRightClick.CurrentFolderFinderSync"
     private static let preferencesApplicationID = "pbs" as CFString
     private static let finderActiveKey = "FinderActive" as CFString
+    private static let legacyQuickActions = [
+        (
+            identifier: "com.qingmeng.SuperRightClick.CopyPathAction",
+            preferenceKey: "APPEXTENSION-com.qingmeng.SuperRightClick.CopyPathAction",
+            action: FinderMenuAction.copyPath
+        ),
+        (
+            identifier: "com.qingmeng.SuperRightClick.HideSelectedAction",
+            preferenceKey: "APPEXTENSION-com.qingmeng.SuperRightClick.HideSelectedAction",
+            action: FinderMenuAction.hideSelected
+        )
+    ]
 
-    static func isEnabled(_ action: FinderActionDescriptor) throws -> Bool {
-        switch action.control {
-        case .quickAction(let preferenceKey):
-            CFPreferencesAppSynchronize(preferencesApplicationID)
-            guard
-                let dictionary = CFPreferencesCopyAppValue(
-                    finderActiveKey,
-                    preferencesApplicationID
-                ) as? [String: Any],
-                let value = dictionary[preferenceKey]
-            else {
-                return false
-            }
-
-            if let boolean = value as? Bool {
-                return boolean
-            }
-            if let number = value as? NSNumber {
-                return number.boolValue
-            }
-            return false
-
-        case .finderSync:
-            let output = try run(
-                executable: "/usr/bin/pluginkit",
-                arguments: ["-m", "-i", action.id]
+    static func prepareFinderMenu() throws {
+        let isFirstMigration = !FinderMenuSettings.hasStoredSettings()
+        if isFirstMigration {
+            var states = Dictionary(
+                uniqueKeysWithValues: FinderMenuAction.allCases.map { ($0, true) }
             )
-            guard let matchingLine = output
-                .split(separator: "\n")
-                .first(where: { $0.contains(action.id) })
-            else {
-                throw ExtensionControlError.extensionNotFound(action.title)
+            for legacy in legacyQuickActions {
+                states[legacy.action] = legacyQuickActionEnabled(legacy.preferenceKey) ?? true
             }
-            return matchingLine.trimmingCharacters(in: .whitespaces).hasPrefix("+")
+            states[.unhideFolderContents] = (try? isPluginEnabled(finderSyncIdentifier)) ?? true
+            try FinderMenuSettings.saveInitialStates(states)
+        }
+
+        let legacyMenuChanged = try disableLegacyQuickActions()
+        try enableFinderSync()
+        if legacyMenuChanged {
+            try reloadFinder()
         }
     }
 
-    static func setEnabled(_ enabled: Bool, for action: FinderActionDescriptor) throws {
-        switch action.control {
-        case .quickAction(let preferenceKey):
-            if enabled {
-                try setPluginEnabled(true, bundleIdentifier: action.id)
-                try setQuickActionEnabled(true, preferenceKey: preferenceKey)
-            } else {
-                try setQuickActionEnabled(false, preferenceKey: preferenceKey)
-                try setPluginEnabled(false, bundleIdentifier: action.id)
-            }
-
-        case .finderSync:
-            try setPluginEnabled(enabled, bundleIdentifier: action.id)
-        }
+    static func enableFinderSync() throws {
+        try setPluginEnabled(true, bundleIdentifier: finderSyncIdentifier)
     }
 
     static func reloadFinder() throws {
@@ -164,13 +143,40 @@ private enum SystemExtensionController {
         _ = try run(executable: "/usr/bin/killall", arguments: ["Finder"])
     }
 
-    private static func setQuickActionEnabled(_ enabled: Bool, preferenceKey: String) throws {
+    private static func legacyQuickActionEnabled(_ preferenceKey: String) -> Bool? {
+        CFPreferencesAppSynchronize(preferencesApplicationID)
+        guard
+            let dictionary = CFPreferencesCopyAppValue(
+                finderActiveKey,
+                preferencesApplicationID
+            ) as? [String: Any],
+            let value = dictionary[preferenceKey]
+        else {
+            return nil
+        }
+        if let boolean = value as? Bool {
+            return boolean
+        }
+        return (value as? NSNumber)?.boolValue
+    }
+
+    private static func disableLegacyQuickActions() throws -> Bool {
         CFPreferencesAppSynchronize(preferencesApplicationID)
         var dictionary = CFPreferencesCopyAppValue(
             finderActiveKey,
             preferencesApplicationID
         ) as? [String: Any] ?? [:]
-        dictionary[preferenceKey] = enabled
+        var changed = false
+
+        for legacy in legacyQuickActions {
+            if legacyQuickActionEnabled(legacy.preferenceKey) == true {
+                dictionary[legacy.preferenceKey] = false
+                changed = true
+            }
+            try? setPluginEnabled(false, bundleIdentifier: legacy.identifier)
+        }
+
+        guard changed else { return false }
 
         CFPreferencesSetAppValue(
             finderActiveKey,
@@ -180,6 +186,21 @@ private enum SystemExtensionController {
         guard CFPreferencesAppSynchronize(preferencesApplicationID) else {
             throw ExtensionControlError.preferenceWriteFailed
         }
+        return true
+    }
+
+    private static func isPluginEnabled(_ bundleIdentifier: String) throws -> Bool {
+        let output = try run(
+            executable: "/usr/bin/pluginkit",
+            arguments: ["-m", "-i", bundleIdentifier]
+        )
+        guard let matchingLine = output
+            .split(separator: "\n")
+            .first(where: { $0.contains(bundleIdentifier) })
+        else {
+            throw ExtensionControlError.extensionNotFound("Finder 右键")
+        }
+        return matchingLine.trimmingCharacters(in: .whitespaces).hasPrefix("+")
     }
 
     private static func setPluginEnabled(_ enabled: Bool, bundleIdentifier: String) throws {

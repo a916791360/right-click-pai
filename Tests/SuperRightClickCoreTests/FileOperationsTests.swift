@@ -79,4 +79,94 @@ final class FileOperationsTests: XCTestCase {
         XCTAssertEqual(try nestedChild.resourceValues(forKeys: [.isHiddenKey]).isHidden, true)
         XCTAssertEqual(try dotFile.resourceValues(forKeys: [.isHiddenKey]).isHidden, true)
     }
+
+    func testMovePlacesSelectedItemsInDestination() throws {
+        let root = try makeTemporaryDirectory()
+        let sourceFolder = root.appendingPathComponent("source", isDirectory: true)
+        let destinationFolder = root.appendingPathComponent("destination", isDirectory: true)
+        let document = sourceFolder.appendingPathComponent("report.txt")
+        try FileManager.default.createDirectory(at: sourceFolder, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: destinationFolder, withIntermediateDirectories: true)
+        XCTAssertTrue(FileManager.default.createFile(atPath: document.path, contents: Data("content".utf8)))
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        try FinderFileOperations.move([document], to: destinationFolder)
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: document.path))
+        XCTAssertTrue(
+            FileManager.default.fileExists(
+                atPath: destinationFolder.appendingPathComponent("report.txt").path
+            )
+        )
+    }
+
+    func testMoveDoesNotOverwriteExistingItem() throws {
+        let root = try makeTemporaryDirectory()
+        let sourceFolder = root.appendingPathComponent("source", isDirectory: true)
+        let destinationFolder = root.appendingPathComponent("destination", isDirectory: true)
+        let source = sourceFolder.appendingPathComponent("report.txt")
+        let existing = destinationFolder.appendingPathComponent("report.txt")
+        try FileManager.default.createDirectory(at: sourceFolder, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: destinationFolder, withIntermediateDirectories: true)
+        XCTAssertTrue(FileManager.default.createFile(atPath: source.path, contents: Data("source".utf8)))
+        XCTAssertTrue(FileManager.default.createFile(atPath: existing.path, contents: Data("existing".utf8)))
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        XCTAssertThrowsError(try FinderFileOperations.move([source], to: destinationFolder))
+        XCTAssertEqual(try String(contentsOf: source, encoding: .utf8), "source")
+        XCTAssertEqual(try String(contentsOf: existing, encoding: .utf8), "existing")
+    }
+
+    func testMoveRejectsMovingFolderIntoItsDescendant() throws {
+        let root = try makeTemporaryDirectory()
+        let sourceFolder = root.appendingPathComponent("source", isDirectory: true)
+        let nestedFolder = sourceFolder.appendingPathComponent("nested", isDirectory: true)
+        try FileManager.default.createDirectory(at: nestedFolder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        XCTAssertThrowsError(try FinderFileOperations.move([sourceFolder], to: nestedFolder))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: sourceFolder.path))
+    }
+
+    func testFinderMenuSettingsDefaultToEnabledAndPersistIndependently() throws {
+        let root = try makeTemporaryDirectory()
+        let settingsURL = root.appendingPathComponent("settings.plist")
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        for action in FinderMenuAction.allCases {
+            XCTAssertTrue(FinderMenuSettings.isEnabled(action, at: settingsURL))
+        }
+
+        try FinderMenuSettings.setEnabled(false, for: .moveTo, at: settingsURL)
+
+        XCTAssertFalse(FinderMenuSettings.isEnabled(.moveTo, at: settingsURL))
+        XCTAssertTrue(FinderMenuSettings.isEnabled(.copyPath, at: settingsURL))
+        XCTAssertTrue(FinderMenuSettings.isEnabled(.hideSelected, at: settingsURL))
+        XCTAssertTrue(FinderMenuSettings.isEnabled(.unhideFolderContents, at: settingsURL))
+    }
+
+    func testMoveRequestRoundTripsPathsAndCanOnlyBeConsumedOnce() throws {
+        let root = try makeTemporaryDirectory()
+        let urls = [
+            URL(fileURLWithPath: "/Users/test/My Files/report.pdf"),
+            URL(fileURLWithPath: "/Volumes/USB/资料.txt")
+        ]
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        let identifier = try MoveRequestStore.create(for: urls, rootDirectory: root)
+
+        XCTAssertEqual(
+            MoveRequestStore.identifier(from: MoveRequestStore.deepLink(for: identifier)),
+            identifier
+        )
+        XCTAssertEqual(try MoveRequestStore.consume(identifier, rootDirectory: root), urls)
+        XCTAssertThrowsError(try MoveRequestStore.consume(identifier, rootDirectory: root))
+    }
+
+    private func makeTemporaryDirectory() throws -> URL {
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        return url
+    }
 }

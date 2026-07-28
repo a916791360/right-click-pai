@@ -2,34 +2,32 @@ import AppKit
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.scenePhase) private var scenePhase
     @StateObject private var extensionManager = ExtensionManager()
 
     private let actions = [
         FinderActionDescriptor(
-            id: "com.qingmeng.SuperRightClick.CopyPathAction",
+            action: .copyPath,
             symbol: "link",
             title: "拷贝路径",
-            detail: "复制完整路径，多选时每行一个",
-            control: .quickAction(
-                preferenceKey: "APPEXTENSION-com.qingmeng.SuperRightClick.CopyPathAction"
-            )
+            detail: "复制完整路径，多选时每行一个"
         ),
         FinderActionDescriptor(
-            id: "com.qingmeng.SuperRightClick.HideSelectedAction",
+            action: .moveTo,
+            symbol: "folder",
+            title: "移动到",
+            detail: "选择目标文件夹后移动所选项目"
+        ),
+        FinderActionDescriptor(
+            action: .hideSelected,
             symbol: "eye.slash",
             title: "隐藏已选项目",
-            detail: "支持文件和文件夹",
-            control: .quickAction(
-                preferenceKey: "APPEXTENSION-com.qingmeng.SuperRightClick.HideSelectedAction"
-            )
+            detail: "支持文件和文件夹"
         ),
         FinderActionDescriptor(
-            id: "com.qingmeng.SuperRightClick.CurrentFolderFinderSync",
+            action: .unhideFolderContents,
             symbol: "eye",
             title: "取消隐藏当前文件夹内全部项目",
-            detail: "恢复当前层的文件和文件夹",
-            control: .finderSync
+            detail: "恢复当前层的文件和文件夹"
         )
     ]
 
@@ -58,10 +56,8 @@ struct ContentView: View {
         .onAppear {
             extensionManager.refresh(actions)
         }
-        .onChange(of: scenePhase) { _, newPhase in
-            if newPhase == .active {
-                extensionManager.refresh(actions)
-            }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            extensionManager.refresh(actions)
         }
         .alert(item: $extensionManager.alert) { alert in
             Alert(
@@ -82,7 +78,7 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text("右键派")
                     .font(.title2.weight(.semibold))
-                Text("三个轻量的 Finder 右键动作")
+                Text("四个轻量的 Finder 右键动作")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -137,7 +133,7 @@ struct ContentView: View {
 
             Spacer()
 
-            Button("打开快速操作设置") {
+            Button("打开 Finder 扩展设置") {
                 openExtensionSettings()
             }
             .buttonStyle(.borderedProminent)
@@ -187,7 +183,7 @@ struct ContentView: View {
     }
 
     private var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.2.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.0"
     }
 
     private func openExtensionSettings() {
