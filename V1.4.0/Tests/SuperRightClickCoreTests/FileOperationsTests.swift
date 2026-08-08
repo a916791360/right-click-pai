@@ -163,6 +163,24 @@ final class FileOperationsTests: XCTestCase {
         XCTAssertThrowsError(try MoveRequestStore.consume(identifier, rootDirectory: root))
     }
 
+    func testTerminalRequestRoundTripsPathsAndCanOnlyBeConsumedOnce() throws {
+        let root = try makeTemporaryDirectory()
+        let urls = [
+            URL(fileURLWithPath: "/Users/test/Projects/right-click-pai"),
+            URL(fileURLWithPath: "/Users/test/Projects/README.md")
+        ]
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        let identifier = try TerminalRequestStore.create(for: urls, rootDirectory: root)
+
+        XCTAssertEqual(
+            TerminalRequestStore.identifier(from: TerminalRequestStore.deepLink(for: identifier)),
+            identifier
+        )
+        XCTAssertEqual(try TerminalRequestStore.consume(identifier, rootDirectory: root), urls)
+        XCTAssertThrowsError(try TerminalRequestStore.consume(identifier, rootDirectory: root))
+    }
+
     private func makeTemporaryDirectory() throws -> URL {
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)

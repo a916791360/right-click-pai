@@ -9,6 +9,7 @@ enum SuperRightClickError: LocalizedError {
     case alreadyInDestination(String)
     case destinationContainsItem(String)
     case cannotMoveIntoDescendant(String)
+    case commandFailed(String)
     case partialFailure(action: String, failures: [(URL, Error)])
 
     var errorDescription: String? {
@@ -29,6 +30,8 @@ enum SuperRightClickError: LocalizedError {
             return "目标文件夹中已存在名为“\(name)”的项目，未执行覆盖。"
         case .cannotMoveIntoDescendant(let name):
             return "不能将文件夹“\(name)”移动到它自身或它的子文件夹中。"
+        case .commandFailed(let message):
+            return message
         case let .partialFailure(action, failures):
             let first = failures[0]
             let detail = first.1.localizedDescription

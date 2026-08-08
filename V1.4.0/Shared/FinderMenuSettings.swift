@@ -6,6 +6,7 @@ enum FinderMenuAction: String, CaseIterable, Hashable {
     case moveTo
     case hideSelected
     case unhideFolderContents
+    case openInTerminal
 }
 
 enum FinderMenuSettings {

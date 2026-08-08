@@ -45,6 +45,13 @@ final class FinderSync: FIFinderSync {
                 action: #selector(hideSelectedItems(_:))
             ))
         }
+        if FinderMenuSettings.isEnabled(.openInTerminal) {
+            menu.addItem(menuItem(
+                title: "进入终端",
+                symbol: "terminal",
+                action: #selector(openInTerminal(_:))
+            ))
+        }
         return menu.items.isEmpty ? nil : menu
     }
 
@@ -87,6 +94,25 @@ final class FinderSync: FIFinderSync {
             }
         } catch {
             showError(title: "无法开始移动", message: error.localizedDescription)
+        }
+    }
+
+    @IBAction private func openInTerminal(_ sender: AnyObject?) {
+        guard let urls = selectedItemURLs() else { return }
+
+        do {
+            let identifier = try TerminalRequestStore.create(for: urls)
+            let didOpen = NSWorkspace.shared.open(TerminalRequestStore.deepLink(for: identifier))
+            guard didOpen else {
+                TerminalRequestStore.discard(identifier)
+                showError(
+                    title: "无法打开终端",
+                    message: "请确认右键派仍安装在“应用程序”文件夹中，然后重试。"
+                )
+                return
+            }
+        } catch {
+            showError(title: "无法开始进入终端", message: error.localizedDescription)
         }
     }
 

@@ -24,6 +24,12 @@ struct ContentView: View {
             detail: "支持文件和文件夹"
         ),
         FinderActionDescriptor(
+            action: .openInTerminal,
+            symbol: "terminal",
+            title: "进入终端",
+            detail: "在所选文件夹（或文件所在目录）打开终端"
+        ),
+        FinderActionDescriptor(
             action: .unhideFolderContents,
             symbol: "eye",
             title: "取消隐藏当前文件夹内全部项目",
@@ -78,7 +84,7 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text("右键派")
                     .font(.title2.weight(.semibold))
-                Text("四个轻量的 Finder 右键动作")
+                Text("五个轻量的 Finder 右键动作")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -183,7 +189,7 @@ struct ContentView: View {
     }
 
     private var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.4.0"
     }
 
     private func openExtensionSettings() {

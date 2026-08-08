@@ -7,6 +7,7 @@ final class SuperRightClickApp: NSObject, NSApplicationDelegate, NSWindowDelegat
     private var settingsWindowController: NSWindowController?
     private var settingsLaunchWorkItem: DispatchWorkItem?
     private let moveRequestCoordinator = MoveRequestCoordinator()
+    private let terminalRequestCoordinator = TerminalRequestCoordinator()
     private var isHandlingMoveRequest = false
 
     static func main() {
@@ -60,13 +61,27 @@ final class SuperRightClickApp: NSObject, NSApplicationDelegate, NSWindowDelegat
     ) {
         guard
             let value = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue,
-            let url = URL(string: value),
-            MoveRequestStore.identifier(from: url) != nil
+            let url = URL(string: value)
         else {
             return
         }
 
-        handleMoveRequest(url)
+        if MoveRequestStore.identifier(from: url) != nil {
+            handleMoveRequest(url)
+        } else if TerminalRequestStore.identifier(from: url) != nil {
+            handleTerminalRequest(url)
+        }
+    }
+
+    private func handleTerminalRequest(_ url: URL) {
+        settingsLaunchWorkItem?.cancel()
+        settingsWindowController?.window?.orderOut(nil)
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate()
+
+        terminalRequestCoordinator.handle(url) {
+            NSApp.terminate(nil)
+        }
     }
 
     private func handleMoveRequest(_ url: URL) {
