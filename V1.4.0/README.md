@@ -18,7 +18,7 @@
 
 ## 下载和安装
 
-从 [Releases](https://github.com/a916791360/right-click-pai/releases/latest) 下载最新的 `RightClickPai-v1.4.0-Apple-Silicon.zip`：
+从 [Releases](https://github.com/a916791360/right-click-pai/releases/latest) 下载最新的 `RightClickPai-v1.4.1-Apple-Silicon.zip`：
 
 1. 解压后，将 `右键派.app` 拖入“应用程序”文件夹。
 2. 第一次打开时，如果 macOS 提示无法验证开发者，请在 Finder 中右键 App，选择“打开”，再确认一次；也可以前往“系统设置 → 隐私与安全性”选择“仍要打开”。
@@ -76,6 +76,12 @@ xcodebuild \
 ```
 
 构建结果位于 `DerivedData/Build/Products/Release/右键派.app`。
+
+发布前运行发行安全检查，确认主程序和 Finder 扩展均已启用 Hardened Runtime，且不包含调试权限：
+
+```bash
+./scripts/verify-release.sh "DerivedData/Build/Products/Release/右键派.app"
+```
 
 运行测试：
 

@@ -18,7 +18,7 @@
 
 ## 下载和安装
 
-从 [Releases](https://github.com/a916791360/right-click-pai/releases/latest) 下载最新的 `RightClickPai-v1.4.0-Apple-Silicon.zip`，解压后将 `右键派.app` 拖入“应用程序”文件夹。
+从 [Releases](https://github.com/a916791360/right-click-pai/releases/latest) 下载最新的 `RightClickPai-v1.4.1-Apple-Silicon.zip`，解压后将 `右键派.app` 拖入“应用程序”文件夹。
 
 详细安装步骤、系统要求、使用说明、隐私说明、从源码构建方法，见 [V1.4.0/README.md](V1.4.0/README.md)。
 
