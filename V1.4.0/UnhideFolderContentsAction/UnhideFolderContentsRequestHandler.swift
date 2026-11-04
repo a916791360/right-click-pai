@@ -150,8 +150,29 @@ final class FinderSync: FIFinderSync {
 
     private func menuItem(title: String, symbol: String, action: Selector) -> NSMenuItem {
         let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
-        item.image = NSImage(systemSymbolName: symbol, accessibilityDescription: title)
+        item.image = menuIcon(symbol: symbol, accessibilityDescription: title)
         return item
+    }
+
+    private func menuIcon(symbol: String, accessibilityDescription: String) -> NSImage? {
+        let tintColor: NSColor = isSystemDarkMode ? .white : .controlTextColor
+        let config = NSImage.SymbolConfiguration(paletteColors: [tintColor])
+        guard let base = NSImage(systemSymbolName: symbol, accessibilityDescription: accessibilityDescription) else {
+            return nil
+        }
+        let image = base.withSymbolConfiguration(config) ?? base
+        image.isTemplate = true
+        return image
+    }
+
+    private var isSystemDarkMode: Bool {
+        if let style = CFPreferencesCopyAppValue("AppleInterfaceStyle" as CFString, kCFPreferencesAnyApplication) as? String {
+            return style.caseInsensitiveCompare("Dark") == .orderedSame
+        }
+        if let style = UserDefaults.standard.string(forKey: "AppleInterfaceStyle") {
+            return style.caseInsensitiveCompare("Dark") == .orderedSame
+        }
+        return false
     }
 
     private func showError(title: String, message: String) {
