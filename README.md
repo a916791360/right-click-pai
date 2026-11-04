@@ -29,4 +29,4 @@
 
 ## 许可证
 
-本项目使用 [MIT License](V1.4.0/LICENSE)。
+本项目使用 [MIT License](LICENSE)。
